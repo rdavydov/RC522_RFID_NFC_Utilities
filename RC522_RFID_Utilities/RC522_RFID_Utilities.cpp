@@ -92,7 +92,7 @@ void RC522_RFID_Utilities::printSector(byte sector, MFRC522::MIFARE_Key *keyA)
 {
   byte trailerBlock = sector * 4 + 3; // get the trailer block
   Serial.println(F("Authenticating using key A..."));
-  byte status = mfrc522->PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, keyA, &(mfrc522->uid));
+  MFRC522::StatusCode status = mfrc522->PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, keyA, &(mfrc522->uid));
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("PCD_Authenticate() failed: "));
     Serial.println(mfrc522->GetStatusCodeName(status));
@@ -127,7 +127,7 @@ void RC522_RFID_Utilities::writeBlock(byte sector, byte blockAddr, byte* dataBlo
 {
   byte trailerBlock = sector * 4 + 3;
   Serial.println(F("Authenticating using key B..."));
-  byte status = mfrc522->PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, keyB, &(mfrc522->uid));
+  MFRC522::StatusCode status = mfrc522->PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, keyB, &(mfrc522->uid));
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("PCD_Authenticate() failed: "));
     Serial.println(mfrc522->GetStatusCodeName(status));
@@ -264,7 +264,7 @@ void RC522_RFID_Utilities::writeByteToTag(byte b, byte blockAddr, MFRC522::MIFAR
 byte RC522_RFID_Utilities::readByteFromTag(byte blockAddr, MFRC522::MIFARE_Key *keyA) {
   byte trailerBlock = blockAddr / 4 * 4;
   Serial.println(F("Authenticating using key A..."));
-  byte status = mfrc522->PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, keyA, &(mfrc522->uid));
+  MFRC522::StatusCode status = mfrc522->PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, keyA, &(mfrc522->uid));
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("PCD_Authenticate() failed: "));
     Serial.println(mfrc522->GetStatusCodeName(status));
@@ -273,7 +273,7 @@ byte RC522_RFID_Utilities::readByteFromTag(byte blockAddr, MFRC522::MIFARE_Key *
 
   byte bufferSize = 18;
   byte buffer[18];
-  byte readStatus = mfrc522->MIFARE_Read(blockAddr,   ///< MIFARE Classic: The block (0-0xff) number. MIFARE Ultralight: The first page to return data from.
+  MFRC522::StatusCode readStatus = mfrc522->MIFARE_Read(blockAddr,   ///< MIFARE Classic: The block (0-0xff) number. MIFARE Ultralight: The first page to return data from.
               buffer,   ///< The buffer to store the data in
               &bufferSize  ///< Buffer size, at least 18 bytes. Also number of bytes returned if STATUS_OK.
             );
